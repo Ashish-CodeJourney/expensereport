@@ -1,44 +1,15 @@
 package com.nelkinda.training;
 
-import java.util.Date;
 import java.util.List;
 
-enum ExpenseType {
-    DINNER, BREAKFAST, CAR_RENTAL
-}
+public class ExpenseReport {
+    private final ReportPrinter printer;
 
-class Expense {
-    ExpenseType type;
-    int amount;
-}
+    public ExpenseReport(ReportPrinter printer) {
+        this.printer = printer;
+    }
 
-class ExpenseReport {
     public void printReport(List<Expense> expenses) {
-        int total = 0;
-        int mealExpenses = 0;
-
-        System.out.println("Expenses " + new Date());
-
-        for (Expense expense : expenses) {
-            if (expense.type == ExpenseType.DINNER || expense.type == ExpenseType.BREAKFAST) {
-                mealExpenses += expense.amount;
-            }
-
-            String expenseName = switch (expense.type) {
-                case DINNER -> "dinner";
-                case BREAKFAST -> "breakfast";
-                case CAR_RENTAL -> "car rental";
-            };
-
-            String mealOverExpensesMarker = expense.type == ExpenseType.DINNER && expense.amount > 5000 ||
-                                            expense.type == ExpenseType.BREAKFAST && expense.amount > 1000 ? "X" : " ";
-
-            System.out.println(expenseName + " " + expense.amount + " " + mealOverExpensesMarker);
-
-            total += expense.amount;
-        }
-
-        System.out.println("Meal expenses: " + mealExpenses);
-        System.out.println("Total expenses: " + total);
+        printer.printReport(expenses);
     }
 }
