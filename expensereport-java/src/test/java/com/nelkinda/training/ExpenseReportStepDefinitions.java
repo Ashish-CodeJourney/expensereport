@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ExpenseReportStepDefinitions {
     private List<Expense> expenses;
     private ByteArrayOutputStream outputStream;
+    private ExpenseReport report;
 
     @Given("the following expenses:")
     public void the_following_expenses(List<List<String>> expenseData) {
@@ -31,10 +32,15 @@ public class ExpenseReportStepDefinitions {
     @When("printing the report")
     public void printing_the_report() {
         outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
-        ExpenseReport report = new ExpenseReport();
+
+        ExpenseFormatter formatter = new SimpleExpenseFormatter();
+        ReportPrinter printer = new ReportPrinter(formatter, System.out);
+        report = new ExpenseReport(printer);
         report.printReport(expenses);
-        System.setOut(System.out);
+
+        System.setOut(originalOut);
     }
 
     @Then("the report MUST look like this:")
